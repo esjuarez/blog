@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\UnauthorizedRequestController;
+use App\Http\Controllers\v1\AccountController;
+use App\Http\Controllers\v1\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,4 +27,13 @@ Route::get('/', function () {
         'success' => true,
         'message' => 'Welcome to ' . env('APP_NAME', 'Laravel')
     ], Response::HTTP_OK);
+});
+
+Route::get('unauthorized', UnauthorizedRequestController::class)->name('unauthorized');
+
+Route::post('account', [AccountController::class, 'store']);
+Route::post('authenticate', [LoginController::class, 'login']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [LoginController::class, 'logout']);
 });
