@@ -2,25 +2,48 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Common\Requests\StoreAccountRequest;
+use App\Common\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\StoreAccountRequest;
+use App\Repositories\AccountRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
 {
     /**
+     * @var StoreAccountRequest
+     */
+    private StoreAccountRequest $accountRequest;
+
+    /**
+     * @var AccountRepository
+     */
+    private AccountRepository $accountRepository;
+
+    public function __construct(StoreAccountRequest $accountRequest, AccountRepository $accountRepository)
+    {
+        $this->accountRequest = $accountRequest;
+        $this->accountRepository = $accountRepository;
+    }
+
+    /**
      * Create account
      *
-     * @param StoreAccountRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function store(StoreAccountRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Your account has been created!'
-        ], Response::HTTP_CREATED);
+        $validator = $this->accountRequest->validate($request);
+
+        if ($validator->fails()) {
+            return Response::badRequest(
+                'The provided data is invalid.',
+                $validator->errors()->all()
+            );
+        }
+
+        return $this->accountRepository->store($request);
     }
 }

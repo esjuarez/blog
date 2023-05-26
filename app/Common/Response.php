@@ -51,6 +51,21 @@ class Response
     }
 
     /**
+     * Resource created response
+     *
+     * @param string $message
+     * @return JsonResponse
+     */
+    public static function createdResource($resource, $name = 'data', $message = 'Created successfully!'): JsonResponse
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            $name => $resource
+        ], HttpFoundationResponse::HTTP_CREATED);
+    }
+
+    /**
      * Delete request
      *
      * @return JsonResponse

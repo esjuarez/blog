@@ -31,7 +31,7 @@ Route::get('/', function () {
 
 Route::get('unauthorized', UnauthorizedRequestController::class)->name('unauthorized');
 
-Route::post('account', [AccountController::class, 'store']);
+Route::post('account/create', [AccountController::class, 'store']);
 Route::post('authenticate', [LoginController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
