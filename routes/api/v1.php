@@ -3,6 +3,7 @@
 use App\Http\Controllers\UnauthorizedRequestController;
 use App\Http\Controllers\v1\AccountController;
 use App\Http\Controllers\v1\LoginController;
+use App\Http\Controllers\v1\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,4 +34,5 @@ Route::get('user', [AccountController::class, 'getUser']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
+    Route::resource('posts', PostController::class)->except(['create', 'edit']);
 });
