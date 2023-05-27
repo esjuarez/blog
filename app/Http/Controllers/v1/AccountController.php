@@ -23,6 +23,7 @@ class AccountController extends Controller
 
     public function __construct(StoreAccountRequest $accountRequest, AccountRepository $accountRepository)
     {
+        $this->middleware(['auth:sanctum'])->except(['store']);
         $this->accountRequest = $accountRequest;
         $this->accountRepository = $accountRepository;
     }
@@ -45,5 +46,16 @@ class AccountController extends Controller
         }
 
         return $this->accountRepository->store($request);
+    }
+
+    /**
+     * Get logged user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getUser(Request $request): JsonResponse
+    {
+        return $this->accountRepository->getUser($request);
     }
 }

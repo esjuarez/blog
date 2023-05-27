@@ -18,10 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/', function () {
     return response()->json([
         'success' => true,
@@ -33,6 +29,7 @@ Route::get('unauthorized', UnauthorizedRequestController::class)->name('unauthor
 
 Route::post('account/create', [AccountController::class, 'store']);
 Route::post('authenticate', [LoginController::class, 'login']);
+Route::get('user', [AccountController::class, 'getUser']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
